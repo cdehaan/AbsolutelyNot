@@ -73,9 +73,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.absnot"
+    namespace "app.absolutelynot"
     defaultConfig {
-        applicationId "com.absnot"
+        applicationId "app.absolutelynot"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

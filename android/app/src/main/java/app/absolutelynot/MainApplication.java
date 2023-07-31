@@ -1,4 +1,4 @@
-package com.absnot;
+package app.absolutelynot;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

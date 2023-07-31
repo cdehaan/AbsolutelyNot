@@ -1,4 +1,4 @@
-package com.absnot;
+package app.absolutelynot;
 
 import android.os.Bundle;
 
@@ -20,7 +20,7 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "AbsNot";
+    return "Absolutely Not";
   }
 
   /**
