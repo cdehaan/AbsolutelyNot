@@ -40,7 +40,7 @@ function FirstScreen({ route, navigation }: Props) {
 
     useEffect(() => {
         GoogleSignin.configure({
-            webClientId: "AIzaSyDmE9-UjiN2k0S4898nRnoO8ZDEagk8TmA", 
+            webClientId: "249666237111-1den31f7egf2d5clsto8phfv1feqahqs.apps.googleusercontent.com", 
             offlineAccess: true,
         });
     })
@@ -49,7 +49,7 @@ function FirstScreen({ route, navigation }: Props) {
         setGoogleData({idToken: "Loading"})
         let userInfo = {idToken: "Placeholder"}
         try {
-            userInfo = await GoogleSignin.signIn();            
+            userInfo = await GoogleSignin.signIn();
             setGoogleData(userInfo)
         } catch (error) {
             ToastAndroid.show(JSON.stringify(error), ToastAndroid.LONG)
