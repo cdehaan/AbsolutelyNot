@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "249666237111",
+    "project_id": "absnot",
+    "storage_bucket": "absnot.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:249666237111:android:45daca089b16f84874d332",
+        "android_client_info": {
+          "package_name": "app.absolutelynot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "249666237111-1den31f7egf2d5clsto8phfv1feqahqs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.absolutelynot",
+            "certificate_hash": "40cd077eac9e93537f47ef942ceb512cd98bc98e"
+          }
+        },
+        {
+          "client_id": "249666237111-eg1ugo0huq6o5jrcds1d78egpjno4lvu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKcSFOws8pMx1Np8OOOxdr_spZ9MY__N8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "249666237111-eg1ugo0huq6o5jrcds1d78egpjno4lvu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

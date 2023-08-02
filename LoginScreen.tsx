@@ -25,6 +25,20 @@ type RootStackParamList = {
     JoinScreen:  undefined;
 };
 
+type GoogleUserData = {
+    idToken: string | null,
+    serverAuthCode: string | null,
+    scopes?: Array<string>,
+    user: {
+      email: string | null,
+      id: string | null,
+      givenName: string | null,
+      familyName: string | null,
+      photo: string | null, // url
+      name: string | null, // full name
+    }
+}
+
 type Props = NativeStackScreenProps<RootStackParamList, 'FirstScreen'>;
 
 function TitleText() {
@@ -36,20 +50,58 @@ function TitleText() {
 
 function FirstScreen({ route, navigation }: Props) {
 
-    const [googleData, setGoogleData] = useState({idToken: "Unknown"})
+    const [googleData, setGoogleData] = useState<GoogleUserData | null>(null)
+    const [googleEmail, setGoogleEmail] = useState('')
 
     useEffect(() => {
         GoogleSignin.configure({
-            webClientId: "249666237111-1den31f7egf2d5clsto8phfv1feqahqs.apps.googleusercontent.com", 
+            webClientId: "249666237111-eg1ugo0huq6o5jrcds1d78egpjno4lvu.apps.googleusercontent.com", 
             offlineAccess: true,
         });
-    })
+        TrySilentSignin()
+    }, [])
+
+    async function TrySilentSignin() {
+        try {
+            const userInfo = await GoogleSignin.signInSilently();
+            setGoogleData(userInfo);
+            setGoogleEmail(userInfo.user.email)
+        } catch (error:unknown) {
+            if (typeof error === "string") {
+                ToastAndroid.show(`Signin error: ${error}`, ToastAndroid.LONG)
+            } else if (typeof error === 'object' && error !== null && 'code' in error) {
+                if (error.code === statusCodes.SIGN_IN_REQUIRED) {
+                    // This is fine, just means user has not signed in yet
+                } else {
+                    // some other error sign in error
+                    // SIGN_IN_CANCELLED: RNGoogleSignin.SIGN_IN_CANCELLED as string,
+                    // IN_PROGRESS: RNGoogleSignin.IN_PROGRESS as string,
+                    // PLAY_SERVICES_NOT_AVAILABLE: RNGoogleSignin.PLAY_SERVICES_NOT_AVAILABLE as string,
+                }
+            } else {
+                // Some other kind of error
+            }
+        }
+        /*
+        // This works fine, old style
+        GoogleSignin.signInSilently()
+            .then(userInfo => {
+                setGoogleData({ userInfo });
+            })
+            .catch((error: SigninError) => {
+                if (error.code === statusCodes.SIGN_IN_REQUIRED) {
+                    // This is fine, just means user has not signed in yet
+                } else {
+                    // some other error
+                }
+            });
+        */
+    }
 
     async function GoogleLogin() {
-        setGoogleData({idToken: "Loading"})
-        let userInfo = {idToken: "Placeholder"}
+        //setGoogleData({idToken: "Loading"})
         try {
-            userInfo = await GoogleSignin.signIn();
+            const userInfo = await GoogleSignin.signIn();
             setGoogleData(userInfo)
         } catch (error) {
             ToastAndroid.show(JSON.stringify(error), ToastAndroid.LONG)
@@ -62,8 +114,8 @@ function FirstScreen({ route, navigation }: Props) {
                 <Text style={styles.header}>Login / Create profile</Text>
                 <View style={styles.socialMediaRow}>
                     <Pressable style={styles.socialMediaButton} onPress={GoogleLogin}><Image source={require('./resources/images/google.png')}   style={styles.socialMediaLogo} /></Pressable>
-                    <Pressable style={styles.socialMediaButton} onPress={null}><Image source={require('./resources/images/facebook.png')} style={styles.socialMediaLogo} /></Pressable>
-                    <Pressable style={styles.socialMediaButton} onPress={null}><Image source={require('./resources/images/twitter.png')}  style={styles.socialMediaLogo} /></Pressable>
+                    <Pressable style={[styles.socialMediaButton, styles.socialMediaButtonDisabled]} onPress={null}><Image source={require('./resources/images/facebook.png')} style={styles.socialMediaLogo} /></Pressable>
+                    <Pressable style={[styles.socialMediaButton, styles.socialMediaButtonDisabled]} onPress={null}><Image source={require('./resources/images/twitter.png')}  style={styles.socialMediaLogo} /></Pressable>
                 </View>
             </View>
 
@@ -84,7 +136,7 @@ function FirstScreen({ route, navigation }: Props) {
                 <Text style={styles.header}>Start a game as a guest</Text>
                 <Pressable style={styles.touchable}><Text style={styles.touchableText}>Start</Text></Pressable>
             </View>
-            <View><Text>Debug:{JSON.stringify(googleData)}</Text></View>
+            <View><Text>Debug:{googleEmail}</Text></View>
         </View>
     )
 }
@@ -145,6 +197,9 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center'
+    },
+    socialMediaButtonDisabled: {
+        backgroundColor: '#888',
     },
     socialMediaLogo: {
         resizeMode:'contain',
