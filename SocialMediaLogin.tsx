@@ -89,12 +89,17 @@ function SocialMediaLogin() {
         outputRange: ['0deg', '360deg']
     });
 
-
-    return(
-        <View>
+    function Spinner() {
+        return(
             <View style={styles.spinnerView}>
                 <Animated.Image source={require('./resources/images/SpinnerCurve.png')} style={[styles.spinnerImage, {transform: [{rotate: spin}]}]} />
             </View>
+        )
+    }
+
+    return(
+        <View>
+            {googleData === null && <Spinner />}
             <Text style={styles.header}>Login / Create profile</Text>
             <View style={styles.socialMediaRow}>
                 <Pressable style={styles.socialMediaButton} onPress={GoogleLogin}><Image source={require('./resources/images/google.png')}   style={styles.socialMediaLogo} /></Pressable>
