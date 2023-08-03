@@ -61,8 +61,19 @@ function SocialMediaLogin() {
 
     async function GoogleLogin() {
         try {
-            const userInfo = await GoogleSignin.signIn();
+            const userInfo = await GoogleSignin.signIn()
             setGoogleData(userInfo)
+            setGoogleEmail(userInfo.user.email)
+        } catch (error) {
+            ToastAndroid.show(JSON.stringify(error), ToastAndroid.LONG)
+        }
+    }
+
+    async function GoogleLogout() {
+        try {
+            await GoogleSignin.signOut()
+            setGoogleData(false)
+            setGoogleEmail('')
         } catch (error) {
             ToastAndroid.show(JSON.stringify(error), ToastAndroid.LONG)
         }
@@ -97,15 +108,32 @@ function SocialMediaLogin() {
         )
     }
 
-    return(
-        <View>
-            {googleData === null && <Spinner />}
+    function SocialButtons() {
+        return(
+            <>
             <Text style={styles.header}>Login / Create profile</Text>
             <View style={styles.socialMediaRow}>
                 <Pressable style={styles.socialMediaButton} onPress={GoogleLogin}><Image source={require('./resources/images/google.png')}   style={styles.socialMediaLogo} /></Pressable>
                 <Pressable style={[styles.socialMediaButton, styles.socialMediaButtonDisabled]} onPress={null}><Image source={require('./resources/images/facebook.png')} style={styles.socialMediaLogo} /></Pressable>
                 <Pressable style={[styles.socialMediaButton, styles.socialMediaButtonDisabled]} onPress={null}><Image source={require('./resources/images/twitter.png')}  style={styles.socialMediaLogo} /></Pressable>
             </View>
+            </>
+        )
+    }
+
+    function GoogleSignout() {
+        return(
+            <View>
+                <Text>I'm in Google</Text>
+                <Pressable onPress={GoogleLogout}><Text>Sign out of Google</Text></Pressable>
+            </View>
+        )
+    }
+
+    return(
+        <View>
+            {googleData === null && <Spinner />}
+            {(googleData === null || googleData === false) ? <SocialButtons /> : <GoogleSignout />}
             <View><Text>Debug:{googleEmail}</Text></View>
         </View>
     )    
