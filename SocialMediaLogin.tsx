@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Image, Pressable, Text, ToastAndroid, View } from "react-native";
+import { useEffect, useRef, useState } from "react";
+import { Animated, Easing, Image, Pressable, Text, ToastAndroid, View } from "react-native";
 
 import {
     GoogleSignin,
@@ -68,8 +68,33 @@ function SocialMediaLogin() {
         }
     }
 
+    const spinAnim = useRef(new Animated.Value(0)).current;
+
+    useEffect(() => {
+        Animated.loop(
+          Animated.timing(
+            spinAnim,
+            {
+              toValue: 1,
+              duration: 1000,
+              easing: Easing.linear,
+              useNativeDriver: true
+            }
+          )
+        ).start(() => console.log('Animation ended'));
+    }, [spinAnim]);
+
+    const spin = spinAnim.interpolate({
+        inputRange: [0, 1],
+        outputRange: ['0deg', '360deg']
+    });
+
+
     return(
         <View>
+            <View style={styles.spinnerView}>
+                <Animated.Image source={require('./resources/images/SpinnerCurve.png')} style={[styles.spinnerImage, {transform: [{rotate: spin}]}]} />
+            </View>
             <Text style={styles.header}>Login / Create profile</Text>
             <View style={styles.socialMediaRow}>
                 <Pressable style={styles.socialMediaButton} onPress={GoogleLogin}><Image source={require('./resources/images/google.png')}   style={styles.socialMediaLogo} /></Pressable>

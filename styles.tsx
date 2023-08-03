@@ -104,6 +104,23 @@ const styles = StyleSheet.create({
     highlight: {
         fontWeight: '700',
     },
+    spinnerView: {
+        position: 'absolute',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%',
+        width: '100%',
+        top: 0,
+        left: 0,
+        zIndex: 100,
+        backgroundColor: 'rgba(255,255,255,0.85)',
+    },
+    spinnerImage: {
+        height: 40,
+        width: 40,
+        zIndex: 200,
+    },
 
     /* QR Scanner */
     centerText: {
@@ -135,6 +152,7 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
     },
+
 })
 
 export { styles }
