@@ -88,6 +88,53 @@ const styles = StyleSheet.create({
         borderTopWidth: 1,
         borderColor: '#888',
     },
+    sectionContainer: {
+        marginTop: 32,
+        paddingHorizontal: 24,
+    },
+    sectionTitle: {
+        fontSize: 24,
+        fontWeight: '600',
+    },
+    sectionDescription: {
+        marginTop: 8,
+        fontSize: 18,
+        fontWeight: '400',
+    },
+    highlight: {
+        fontWeight: '700',
+    },
+
+    /* QR Scanner */
+    centerText: {
+      flex: 1,
+      fontSize: 18,
+      padding: 32,
+      color: '#777'
+    },
+    textBold: {
+      fontWeight: '500',
+      color: '#000'
+    },
+    buttonText: {
+      fontSize: 21,
+      color: 'rgb(0,122,255)'
+    },
+    buttonTouchable: {
+      padding: 16
+    },
+
+    /* Status Footer */
+        footerView: {
+        flexDirection: 'row',
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    footerImage: {
+        width: 40,
+        height: 40,
+    },
 })
 
 export { styles }

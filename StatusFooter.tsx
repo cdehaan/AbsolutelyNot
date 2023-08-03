@@ -1,17 +1,9 @@
 import React, { PropsWithChildren } from 'react';
+import { Image, Text, View, } from 'react-native';
 
-import {
-    Image,
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native';
+import { styles } from './styles';
 
-type StatusFooterProps = PropsWithChildren <{
-    score: number;
-}>;
-
-const footerHeight = 40
+type StatusFooterProps = PropsWithChildren <{ score: number; }>;
 
 function StatusFooter({score}: StatusFooterProps) {
     return(
@@ -28,18 +20,5 @@ function StatusFooter({score}: StatusFooterProps) {
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    footerView: {
-        flexDirection: 'row',
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    footerImage: {
-        width: footerHeight,
-        height: footerHeight,
-    }
-  });  
 
 export default StatusFooter
