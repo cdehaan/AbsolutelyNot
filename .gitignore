@@ -67,3 +67,6 @@ yarn-error.log
 
 # key data
 keyData.txt
+
+# credentials
+.env

@@ -6,6 +6,8 @@ import {
     statusCodes,
 } from '@react-native-google-signin/google-signin';
 
+import Config from 'react-native-config';
+
 import { styles } from "./styles";
 
 
@@ -24,12 +26,12 @@ type GoogleUserData = {
 }
 
 function SocialMediaLogin() {
-    const [googleData, setGoogleData] = useState<GoogleUserData | null | boolean>(null)
-    const [googleEmail, setGoogleEmail] = useState('')
+    // null = unknown, false = not signed in
+    const [googleData, setGoogleData] = useState<GoogleUserData | null | false>(null)
 
     useEffect(() => {
         GoogleSignin.configure({
-            webClientId: "249666237111-eg1ugo0huq6o5jrcds1d78egpjno4lvu.apps.googleusercontent.com", 
+            webClientId: Config.GoogleSignin_webClientId,
             offlineAccess: true,
         });
         TrySilentSignin()
@@ -39,7 +41,6 @@ function SocialMediaLogin() {
         try {
             const userInfo = await GoogleSignin.signInSilently();
             setGoogleData(userInfo);
-            setGoogleEmail(userInfo.user.email)
         } catch (error:unknown) {
             setGoogleData(false);
             if (typeof error === "string") {
@@ -63,7 +64,6 @@ function SocialMediaLogin() {
         try {
             const userInfo = await GoogleSignin.signIn()
             setGoogleData(userInfo)
-            setGoogleEmail(userInfo.user.email)
         } catch (error) {
             ToastAndroid.show(JSON.stringify(error), ToastAndroid.LONG)
         }
@@ -73,7 +73,6 @@ function SocialMediaLogin() {
         try {
             await GoogleSignin.signOut()
             setGoogleData(false)
-            setGoogleEmail('')
         } catch (error) {
             ToastAndroid.show(JSON.stringify(error), ToastAndroid.LONG)
         }
@@ -121,22 +120,34 @@ function SocialMediaLogin() {
         )
     }
 
+    const picture = (googleData && googleData.user && googleData.user.photo) ? googleData.user.photo : ''
+    //const googleName = (googleData ? `${googleData.user.givenName} ${googleData.user.familyName}` : null)
+    const googleName = (googleData ? googleData.user.name : null)
+    const googleEmail = (googleData ? googleData.user.email : null)
+
     function GoogleSignout() {
         return(
-            <View>
-                <Text>I'm in Google</Text>
-                <Pressable onPress={GoogleLogout}><Text>Sign out of Google</Text></Pressable>
+            <>
+            <Text style={styles.header}>Change Account</Text>
+            <View style={styles.googleAccountWrapper}>
+                <Image style={styles.googleAccountImage} source={{uri: picture}} />
+                <View style={styles.googleAccountInner}>
+                    <Text numberOfLines={1} style={styles.googleName}>{googleName}</Text>
+                    <Text numberOfLines={1} style={styles.googleEmail}>{googleEmail}</Text>
+                </View>
+                <Pressable onPress={GoogleLogout}><Text style={styles.googleSignoutButton}>Sign out</Text></Pressable>
             </View>
+            </>
         )
     }
 
     return(
-        <View>
+        <View style={{height: 100, display: 'flex', justifyContent:'flex-end'}}>
             {googleData === null && <Spinner />}
             {(googleData === null || googleData === false) ? <SocialButtons /> : <GoogleSignout />}
-            <View><Text>Debug:{googleEmail}</Text></View>
         </View>
-    )    
+    )
+    //<View><Text>Debug:{googleEmail}</Text></View>
 }
 
 

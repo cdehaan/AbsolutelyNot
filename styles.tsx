@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     },
 
     /* Status Footer */
-        footerView: {
+    footerView: {
         flexDirection: 'row',
         flex: 1,
         justifyContent: 'center',
@@ -151,6 +151,41 @@ const styles = StyleSheet.create({
     footerImage: {
         width: 40,
         height: 40,
+    },
+
+    /* Google login account info */
+    googleAccountWrapper: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderWidth: 1,
+        padding: 5,
+        borderRadius: 5,
+    },
+    googleAccountInner: {
+        display: 'flex',
+        flex: 1,
+        flexDirection: 'column',
+        overflow: 'hidden',
+    },
+    googleName: {
+        fontSize: 16,
+        color: '#000'
+    },
+    googleEmail: {
+        fontSize: 12
+    },
+    googleAccountImage: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        marginRight: 5,
+    },
+    googleSignoutButton: {
+        backgroundColor: '#4688f1',
+        color: '#fff',
+        padding: 5,
+        borderRadius: 5,
     },
 
 })
