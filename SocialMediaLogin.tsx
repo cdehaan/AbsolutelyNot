@@ -1,16 +1,16 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Animated, Easing, Image, Pressable, Text, ToastAndroid, View } from "react-native";
 
-import {
-    GoogleSignin,
-    statusCodes,
-} from '@react-native-google-signin/google-signin';
+import { GoogleSignin, statusCodes, } from '@react-native-google-signin/google-signin';
 
 import Config from 'react-native-config';
 
 import { styles } from "./styles";
+import { useDispatch, useSelector } from "react-redux";
+import { SigninStatus, setGoogleUser, setSignedIn } from "./store/slices/googleAccount";
+import { RootState } from "./store/store";
 
-
+// https://github.com/react-native-google-signin/google-signin#3-userinfo
 type GoogleUserData = {
     idToken: string | null,
     serverAuthCode: string | null,
@@ -26,8 +26,10 @@ type GoogleUserData = {
 }
 
 function SocialMediaLogin() {
-    // null = unknown, false = not signed in
-    const [googleData, setGoogleData] = useState<GoogleUserData | null | false>(null)
+    const dispatch = useDispatch()
+    const { isSignedIn, name, email, profilePictureURL, internalID } = useSelector((state: RootState) => state.user)
+
+    //const [googleData, setGoogleData] = useState<GoogleUserData | null | false>(null)
 
     useEffect(() => {
         GoogleSignin.configure({
@@ -40,41 +42,65 @@ function SocialMediaLogin() {
     async function TrySilentSignin() {
         try {
             const userInfo = await GoogleSignin.signInSilently();
-            setGoogleData(userInfo);
-        } catch (error:unknown) {
-            setGoogleData(false);
-            if (typeof error === "string") {
-                ToastAndroid.show(`Signin error: ${error}`, ToastAndroid.LONG)
-            } else if (typeof error === 'object' && error !== null && 'code' in error) {
-                if (error.code === statusCodes.SIGN_IN_REQUIRED) {
-                    // This is fine, just means user has not signed in yet
-                } else {
-                    // some other error sign in error
-                    // SIGN_IN_CANCELLED
-                    // IN_PROGRESS
-                    // PLAY_SERVICES_NOT_AVAILABLE
-                }
-            } else {
-                // Some other kind of error
-            }
+            HandleGoogleSignin(userInfo)
+        } catch (error) {
+            HandleGoogleSigninError(error)
         }
     }
 
     async function GoogleLogin() {
         try {
             const userInfo = await GoogleSignin.signIn()
-            setGoogleData(userInfo)
+            HandleGoogleSignin(userInfo)
         } catch (error) {
-            ToastAndroid.show(JSON.stringify(error), ToastAndroid.LONG)
+            HandleGoogleSigninError(error)
         }
     }
 
     async function GoogleLogout() {
         try {
             await GoogleSignin.signOut()
-            setGoogleData(false)
+            setSignedIn(SigninStatus.NOT_SIGNED_IN)
         } catch (error) {
-            ToastAndroid.show(JSON.stringify(error), ToastAndroid.LONG)
+            HandleGoogleSigninError(error)
+        }
+    }
+
+    function HandleGoogleSignin(userInfo: GoogleUserData) {
+        const userData = {
+            isSignedIn: SigninStatus.SIGNED_IN,
+            name: userInfo.user.name,
+            email: userInfo.user.email,
+            profilePictureURL: userInfo.user.photo,
+            internalID: null,
+        }
+        dispatch(setGoogleUser(userData))
+    }
+
+    function HandleGoogleSigninError(error: unknown) {
+        if (typeof error === "string") {
+            dispatch(setSignedIn(SigninStatus.ERROR))
+            ToastAndroid.show(`Signin error: ${error}`, ToastAndroid.LONG)
+        } else if (typeof error === 'object' && error !== null && 'code' in error) {
+            if (error.code === statusCodes.SIGN_IN_REQUIRED) {
+                // This is fine, just means user has not signed in yet, so we can't do it silently
+            }
+            else if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+                dispatch(setSignedIn(SigninStatus.NOT_SIGNED_IN))
+            }
+            else if (error.code === statusCodes.IN_PROGRESS) {
+                dispatch(setSignedIn(SigninStatus.SIGNING_IN))
+            }
+            else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+                dispatch(setSignedIn(SigninStatus.ERROR))
+                ToastAndroid.show('Google Play Service is not available or outdated, you cannot sign in with your Google Account in this app. Sorry.', ToastAndroid.LONG)
+            } else {
+                dispatch(setSignedIn(SigninStatus.ERROR))
+                ToastAndroid.show(`Unknown Google Account sign in error. Google said: ${error.code}. Sorry.`, ToastAndroid.LONG)
+            }
+        } else {
+            dispatch(setSignedIn(SigninStatus.ERROR))
+            ToastAndroid.show('Unknown Google Account sign in error. Google sent no reason. Sorry.', ToastAndroid.LONG)
         }
     }
 
@@ -120,20 +146,15 @@ function SocialMediaLogin() {
         )
     }
 
-    const picture = (googleData && googleData.user && googleData.user.photo) ? googleData.user.photo : ''
-    //const googleName = (googleData ? `${googleData.user.givenName} ${googleData.user.familyName}` : null)
-    const googleName = (googleData ? googleData.user.name : null)
-    const googleEmail = (googleData ? googleData.user.email : null)
-
     function GoogleSignout() {
         return(
             <>
             <Text style={styles.header}>Change Account</Text>
             <View style={styles.googleAccountWrapper}>
-                <Image style={styles.googleAccountImage} source={{uri: picture}} />
+                <Image style={styles.googleAccountImage} source={{uri: (profilePictureURL ? profilePictureURL : '')}} />
                 <View style={styles.googleAccountInner}>
-                    <Text numberOfLines={1} style={styles.googleName}>{googleName}</Text>
-                    <Text numberOfLines={1} style={styles.googleEmail}>{googleEmail}</Text>
+                    <Text numberOfLines={1} style={styles.googleName}>{name}</Text>
+                    <Text numberOfLines={1} style={styles.googleEmail}>{email}</Text>
                 </View>
                 <Pressable onPress={GoogleLogout}><Text style={styles.googleSignoutButton}>Sign out</Text></Pressable>
             </View>
@@ -141,10 +162,13 @@ function SocialMediaLogin() {
         )
     }
 
+    const showSpinner = (isSignedIn === SigninStatus.UNKNOWN || isSignedIn === SigninStatus.SIGNING_IN )
+
     return(
         <View style={{height: 100, display: 'flex', justifyContent:'flex-end'}}>
-            {googleData === null && <Spinner />}
-            {(googleData === null || googleData === false) ? <SocialButtons /> : <GoogleSignout />}
+            {showSpinner && <Spinner />}
+            {isSignedIn === SigninStatus.NOT_SIGNED_IN && <SocialButtons />}
+            {isSignedIn === SigninStatus.SIGNED_IN && <GoogleSignout />}
         </View>
     )
     //<View><Text>Debug:{googleEmail}</Text></View>
