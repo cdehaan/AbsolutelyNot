@@ -24,7 +24,7 @@ const initialState: GoogleUser = {
   internalID: null,
 }
 
-export const userSlice = createSlice({
+export const googleUserSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
@@ -41,6 +41,6 @@ export const userSlice = createSlice({
   },
 })
 
-export const { setGoogleUser, setSignedIn } = userSlice.actions
+export const { setGoogleUser, setSignedIn } = googleUserSlice.actions
 
-export default userSlice.reducer
+export default googleUserSlice.reducer

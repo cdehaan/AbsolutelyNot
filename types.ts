@@ -5,10 +5,10 @@ export type RootStackParamList = {
 };
 
 export type Player = {
-    player_key:  number;
-    name:        string;
-    secret?:     string;
-    game_key:    number;
-    last_action: number;
-    active:      boolean;
+    playerKey:   number | null;
+    name:        string | null;
+    secret?:     string | null; // yes, both undefined and null have meaning
+    gameKey:     number | null;
+    lastAction:  number | null;
+    active:      boolean | null;
 }
