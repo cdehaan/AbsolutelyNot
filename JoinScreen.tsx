@@ -1,9 +1,16 @@
 import React, { useRef, useState } from "react";
 import { NativeSyntheticEvent, Pressable, Text, TextInput, TextInputChangeEventData, View } from "react-native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from './types';
+
 import QRScanner from "./QRScanner";
 import { styles } from "./styles";
 
-function JoinScreen() {
+type JoinScreenProps = {
+    navigation: NativeStackNavigationProp<RootStackParamList, 'JoinScreen'>;
+};
+
+function JoinScreen({ navigation }: JoinScreenProps) {
     const codeLength = 6
     const [gameCode, setGameCode] = useState(Array(codeLength).fill(''))
 
@@ -64,17 +71,23 @@ function JoinScreen() {
         <View style={styles.coreView}>
             <Text style={styles.header}>Join with code</Text>
 
-            <View style={{flex: 1, paddingRight: 10}}>
+            <View style={{paddingRight: 10}}>
                 <View style={{flexDirection: 'row', justifyContent: 'center'}}>
                 {letterElements}
                 </View>
                 <Pressable style={styles.touchable}><Text style={styles.touchableText}>Join</Text></Pressable>
             </View>
 
+            <View style={styles.hrView}>
+                <View style={styles.hr} /><Text>or</Text><View style={styles.hr} />
+            </View>
+
             <Text style={styles.header}>Join with QR Code</Text>
             <View style={{flex: 1, paddingRight: 10}}>
                 <QRScanner/>
             </View>
+
+            <Pressable style={styles.touchable} onPress={navigation.goBack}><Text style={styles.touchableText}>⬅ Back</Text></Pressable>
         </View>
     )
 }

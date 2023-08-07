@@ -16,11 +16,7 @@ import SocialMediaLogin from './SocialMediaLogin';
 import { RootState } from './store/store';
 import { useSelector } from 'react-redux';
 import { SigninStatus } from "./store/slices/googleAccount";
-
-type RootStackParamList = {
-    FirstScreen: undefined;
-    JoinScreen:  undefined;
-};
+import { RootStackParamList } from './types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'FirstScreen'>;
 
