@@ -13,6 +13,7 @@ import {
 import { styles } from './styles';
 import JoinScreen from './JoinScreen';
 import SocialMediaLogin from './SocialMediaLogin';
+import Lobby from './Lobby';
 import { RootState } from './store/store';
 import { useSelector } from 'react-redux';
 import { SigninStatus } from "./store/slices/googleAccount";
@@ -51,7 +52,7 @@ function FirstScreen({ route, navigation }: Props) {
 
             <View>
                 <Text style={styles.header}>Start a game{isGuest && ' as a guest'}</Text>
-                <Pressable style={styles.primaryTouchable}><Text style={styles.primaryTouchableText}>Start</Text></Pressable>
+                <Pressable style={styles.primaryTouchable} onPress={() => navigation.navigate('Lobby')}><Text style={styles.primaryTouchableText}>Start</Text></Pressable>
             </View>
         </View>
     )
@@ -66,6 +67,7 @@ function LoginScreen() {
         <Stack.Navigator initialRouteName="FirstScreen" screenOptions={{headerShown: false}}>
             <Stack.Screen name={"FirstScreen"} component={FirstScreen} />
             <Stack.Screen name={"JoinScreen"} component={JoinScreen} />
+            <Stack.Screen name={"Lobby"} component={Lobby} />
         </Stack.Navigator>
         </View>
     )

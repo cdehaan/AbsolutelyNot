@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { NativeSyntheticEvent, Pressable, Text, TextInput, TextInputChangeEventData, View } from "react-native";
+import { NativeSyntheticEvent, Pressable, Text, TextInput, TextInputChangeEventData, View, Keyboard } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from './types';
 
@@ -13,6 +13,28 @@ type JoinScreenProps = {
 function JoinScreen({ navigation }: JoinScreenProps) {
     const codeLength = 6
     const [gameCode, setGameCode] = useState(Array(codeLength).fill(''))
+    const [keyboardVisible, setKeyboardVisible] = useState(false);
+
+    useEffect(() => {
+        const keyboardDidShowListener = Keyboard.addListener(
+          'keyboardDidShow',
+          () => {
+            setKeyboardVisible(true);
+          },
+        );
+    
+        const keyboardDidHideListener = Keyboard.addListener(
+          'keyboardDidHide',
+          () => {
+            setKeyboardVisible(false);
+          },
+        );
+    
+        return () => {
+          keyboardDidHideListener.remove();
+          keyboardDidShowListener.remove();
+        };
+    }, []);
 
     function handleChange(e: NativeSyntheticEvent<TextInputChangeEventData>, i:number) {
         let newGameCode = [...gameCode]
@@ -78,17 +100,16 @@ function JoinScreen({ navigation }: JoinScreenProps) {
 
     const codeJoinDisabled = gameCode.reduce((accumulator, currentValue) => {return (currentValue === "" || accumulator)}, false)
 
-    return(
-        <View style={styles.coreView}>
-            <Text style={styles.header}>Join with code</Text>
-
-            <View style={{paddingRight: 10}}>
-                <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-                {letterElements}
-                </View>
-                <Pressable style={codeJoinDisabled ? styles.disabledTouchable : styles.primaryTouchable}><Text style={codeJoinDisabled ? styles.disabledTouchableText : styles.primaryTouchableText}>Join</Text></Pressable>
+    const enterCodeComponent = <>
+        <Text style={styles.header}>Join with code</Text>
+        <View style={{paddingRight: 10}}>
+            <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+            {letterElements}
             </View>
+            <Pressable style={codeJoinDisabled ? styles.disabledTouchable : styles.primaryTouchable}><Text style={codeJoinDisabled ? styles.disabledTouchableText : styles.primaryTouchableText}>Join</Text></Pressable>
+        </View></>
 
+        const qrScannerComponent = <>
             <View style={styles.hrView}>
                 <View style={styles.hr} /><Text>or</Text><View style={styles.hr} />
             </View>
@@ -100,6 +121,15 @@ function JoinScreen({ navigation }: JoinScreenProps) {
             <View style={{alignItems: 'center'}}>
                 <Pressable style={[styles.secondaryTouchable, {width: '50%'}]} onPress={navigation.goBack}><Text style={styles.secondaryTouchableText}>Back</Text></Pressable>
             </View>
+        </>
+
+
+    //const [KeyboardVisible, setKeyboardVisible] = useState(false);
+
+    return(
+        <View style={styles.coreView}>
+            {enterCodeComponent}
+            {!keyboardVisible && qrScannerComponent}
         </View>
     )
 }
