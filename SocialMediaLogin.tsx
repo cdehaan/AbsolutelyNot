@@ -31,8 +31,6 @@ function SocialMediaLogin() {
     //const { isSignedIn, name, email, profilePictureURL, internalID } = useSelector((state: RootState) => state.user)
 
     useEffect(() => {
-        console.log('Easy')
-        console.log(Config.GoogleSignin_webClientId)
         GoogleSignin.configure({
             webClientId: Config.GoogleSignin_webClientId,
             offlineAccess: true,
