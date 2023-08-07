@@ -34,7 +34,7 @@ function QRScanner() {
         <QRCodeScanner
           ref={cameraParent}
           onRead={onSuccess}
-          containerStyle={{backgroundColor:'#88f', borderWidth: 3, borderColor:'#f88', alignItems:'center'}}
+          containerStyle={{alignItems:'center'}}
           cameraStyle={{height: (cameraHeight/1.5), width:(cameraHeight/1.5)}}
         />
       </View>
