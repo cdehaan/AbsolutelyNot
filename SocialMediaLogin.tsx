@@ -33,6 +33,7 @@ function SocialMediaLogin() {
     useEffect(() => {
         GoogleSignin.configure({
             webClientId: Config.GoogleSignin_webClientId,
+            iosClientId: Config.GoogleSignin_iosClientId,
             offlineAccess: true,
         });
         TrySilentSignin()
