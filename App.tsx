@@ -6,6 +6,9 @@
 
 import React, {useState} from 'react';
 
+import { Provider } from 'react-redux'
+import { store } from './store/store'
+
 import LoginScreen from './LoginScreen';
 import GameScreen from './GameScreen';
 import StatusFooter from './StatusFooter';
@@ -42,6 +45,7 @@ function App(): JSX.Element {
   };
 
   return (
+    <Provider store={store}>
     <NavigationContainer>{
     <SafeAreaView style={[backgroundStyle, {flex: 1}]}>
       <StatusBar
@@ -53,6 +57,7 @@ function App(): JSX.Element {
       {LoggedIn() && <StatusFooter score={5} />}
     </SafeAreaView>
     }</NavigationContainer>
+    </Provider>
   );
 }
 
