@@ -35,6 +35,7 @@ function SocialMediaLogin() {
         console.log(Config.GoogleSignin_webClientId)
         GoogleSignin.configure({
             webClientId: Config.GoogleSignin_webClientId,
+            iosClientId: Config.GoogleSignin_iosClientId,
             offlineAccess: true,
         });
         TrySilentSignin()
