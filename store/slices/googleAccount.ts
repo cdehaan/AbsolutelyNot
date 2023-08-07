@@ -30,6 +30,7 @@ export const userSlice = createSlice({
   reducers: {
     setGoogleUser: (state, action: PayloadAction<GoogleUser>) => {
       state.isSignedIn = action.payload.isSignedIn
+      state.name = action.payload.name
       state.email = action.payload.email
       state.profilePictureURL = action.payload.profilePictureURL
       state.internalID = action.payload.internalID

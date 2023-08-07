@@ -13,6 +13,9 @@ import {
 import { styles } from './styles';
 import JoinScreen from './JoinScreen';
 import SocialMediaLogin from './SocialMediaLogin';
+import { RootState } from './store/store';
+import { useSelector } from 'react-redux';
+import { SigninStatus } from "./store/slices/googleAccount";
 
 type RootStackParamList = {
     FirstScreen: undefined;
@@ -30,6 +33,10 @@ function TitleText() {
 
 function FirstScreen({ route, navigation }: Props) {
 
+    const googleUser = useSelector((state: RootState) => state.googleUser)
+
+    const isGuest = googleUser.isSignedIn !== SigninStatus.SIGNED_IN
+
     return(
         <View style={styles.coreView}>
             <SocialMediaLogin />
@@ -38,7 +45,7 @@ function FirstScreen({ route, navigation }: Props) {
             </View>
 
             <View>
-                <Text style={styles.header}>Join a game as a guest</Text>
+                <Text style={styles.header}>Join a game{isGuest && ' as a guest'}</Text>
                 <Pressable style={styles.touchable} onPress={() => navigation.navigate('JoinScreen')}><Text style={styles.touchableText}>Join</Text></Pressable>
             </View>
 
@@ -47,7 +54,7 @@ function FirstScreen({ route, navigation }: Props) {
             </View>
 
             <View>
-                <Text style={styles.header}>Start a game as a guest</Text>
+                <Text style={styles.header}>Start a game{isGuest && ' as a guest'}</Text>
                 <Pressable style={styles.touchable}><Text style={styles.touchableText}>Start</Text></Pressable>
             </View>
         </View>

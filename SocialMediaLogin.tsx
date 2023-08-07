@@ -27,9 +27,8 @@ type GoogleUserData = {
 
 function SocialMediaLogin() {
     const dispatch = useDispatch()
-    const { isSignedIn, name, email, profilePictureURL, internalID } = useSelector((state: RootState) => state.user)
-
-    //const [googleData, setGoogleData] = useState<GoogleUserData | null | false>(null)
+    const googleUser = useSelector((state: RootState) => state.googleUser)
+    //const { isSignedIn, name, email, profilePictureURL, internalID } = useSelector((state: RootState) => state.user)
 
     useEffect(() => {
         GoogleSignin.configure({
@@ -60,7 +59,7 @@ function SocialMediaLogin() {
     async function GoogleLogout() {
         try {
             await GoogleSignin.signOut()
-            setSignedIn(SigninStatus.NOT_SIGNED_IN)
+            dispatch(setSignedIn(SigninStatus.NOT_SIGNED_IN))
         } catch (error) {
             HandleGoogleSigninError(error)
         }
@@ -84,6 +83,7 @@ function SocialMediaLogin() {
         } else if (typeof error === 'object' && error !== null && 'code' in error) {
             if (error.code === statusCodes.SIGN_IN_REQUIRED) {
                 // This is fine, just means user has not signed in yet, so we can't do it silently
+                dispatch(setSignedIn(SigninStatus.NOT_SIGNED_IN))
             }
             else if (error.code === statusCodes.SIGN_IN_CANCELLED) {
                 dispatch(setSignedIn(SigninStatus.NOT_SIGNED_IN))
@@ -109,8 +109,7 @@ function SocialMediaLogin() {
     useEffect(() => {
         Animated.loop(
           Animated.timing(
-            spinAnim,
-            {
+            spinAnim, {
               toValue: 1,
               duration: 1000,
               easing: Easing.linear,
@@ -151,10 +150,10 @@ function SocialMediaLogin() {
             <>
             <Text style={styles.header}>Change Account</Text>
             <View style={styles.googleAccountWrapper}>
-                <Image style={styles.googleAccountImage} source={{uri: (profilePictureURL ? profilePictureURL : '')}} />
+                <Image style={styles.googleAccountImage} source={{uri: (googleUser.profilePictureURL ? googleUser.profilePictureURL : '')}} />
                 <View style={styles.googleAccountInner}>
-                    <Text numberOfLines={1} style={styles.googleName}>{name}</Text>
-                    <Text numberOfLines={1} style={styles.googleEmail}>{email}</Text>
+                    <Text numberOfLines={1} style={styles.googleName}>{googleUser.name}</Text>
+                    <Text numberOfLines={1} style={styles.googleEmail}>{googleUser.email}</Text>
                 </View>
                 <Pressable onPress={GoogleLogout}><Text style={styles.googleSignoutButton}>Sign out</Text></Pressable>
             </View>
@@ -162,16 +161,15 @@ function SocialMediaLogin() {
         )
     }
 
-    const showSpinner = (isSignedIn === SigninStatus.UNKNOWN || isSignedIn === SigninStatus.SIGNING_IN )
+    const showSpinner = (googleUser.isSignedIn === SigninStatus.UNKNOWN || googleUser.isSignedIn === SigninStatus.SIGNING_IN )
 
     return(
         <View style={{height: 100, display: 'flex', justifyContent:'flex-end'}}>
             {showSpinner && <Spinner />}
-            {isSignedIn === SigninStatus.NOT_SIGNED_IN && <SocialButtons />}
-            {isSignedIn === SigninStatus.SIGNED_IN && <GoogleSignout />}
+            {googleUser.isSignedIn === SigninStatus.NOT_SIGNED_IN && <SocialButtons />}
+            {googleUser.isSignedIn === SigninStatus.SIGNED_IN && <GoogleSignout />}
         </View>
     )
-    //<View><Text>Debug:{googleEmail}</Text></View>
 }
 
 

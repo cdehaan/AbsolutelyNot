@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
-import userReducer from './slices/googleAccount'
+import googleUserReducer from './slices/googleAccount'
 
 export const store = configureStore({
   reducer: {
-    user: userReducer,
+    googleUser: googleUserReducer,
   },
 })
 
