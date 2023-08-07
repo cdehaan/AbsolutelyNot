@@ -51,7 +51,17 @@ const styles = StyleSheet.create({
         height: 20,
         width: 20,
     },
-    touchable: {
+    primaryTouchable: {
+        width: '100%',
+        borderRadius: 5,
+        borderColor: '#bbb',
+        backgroundColor: '#296cb1',
+        color: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 40,
+    },
+    secondaryTouchable: {
         borderRadius: 5,
         borderWidth: 1,
         borderColor: '#bbb',
@@ -59,8 +69,26 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         height: 40,
     },
-    touchableText: {
+    disabledTouchable: {
+        borderRadius: 5,
+        borderWidth: 0,
+        borderColor: '#bbb',
+        backgroundColor: '#ddd',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 40,
+    },
+    primaryTouchableText: {
         fontSize: 20,
+        color: '#fff',
+    },
+    secondaryTouchableText: {
+        fontSize: 20,
+        color: '#296cb1',
+    },
+    disabledTouchableText: {
+        fontSize: 20,
+        color: '#888',
     },
     input: {
         borderBottomWidth: 1,
@@ -182,7 +210,7 @@ const styles = StyleSheet.create({
         marginRight: 5,
     },
     googleSignoutButton: {
-        backgroundColor: '#4688f1',
+        backgroundColor: '#296cb1',
         color: '#fff',
         padding: 5,
         borderRadius: 5,

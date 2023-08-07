@@ -42,7 +42,7 @@ function FirstScreen({ route, navigation }: Props) {
 
             <View>
                 <Text style={styles.header}>Join a game{isGuest && ' as a guest'}</Text>
-                <Pressable style={styles.touchable} onPress={() => navigation.navigate('JoinScreen')}><Text style={styles.touchableText}>Join</Text></Pressable>
+                <Pressable style={styles.primaryTouchable} onPress={() => navigation.navigate('JoinScreen')}><Text style={styles.primaryTouchableText}>Join</Text></Pressable>
             </View>
 
             <View style={styles.hrView}>
@@ -51,7 +51,7 @@ function FirstScreen({ route, navigation }: Props) {
 
             <View>
                 <Text style={styles.header}>Start a game{isGuest && ' as a guest'}</Text>
-                <Pressable style={styles.touchable}><Text style={styles.touchableText}>Start</Text></Pressable>
+                <Pressable style={styles.primaryTouchable}><Text style={styles.primaryTouchableText}>Start</Text></Pressable>
             </View>
         </View>
     )

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { NativeSyntheticEvent, Pressable, Text, TextInput, TextInputChangeEventData, View } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from './types';
@@ -67,6 +67,17 @@ function JoinScreen({ navigation }: JoinScreenProps) {
         )
     }
 
+    // Blurs the code inputs to drop the virtual keyboard when the code is fully entered
+    useEffect(() => {
+        const codeComplete = gameCode.reduce((accumulator, currentValue) => {return (currentValue !== "" && accumulator)}, true)
+        if(codeComplete) {
+            letterRefs.forEach(letter => {letter.current?.blur()})
+        }
+    }, [gameCode])
+    
+
+    const codeJoinDisabled = gameCode.reduce((accumulator, currentValue) => {return (currentValue === "" || accumulator)}, false)
+
     return(
         <View style={styles.coreView}>
             <Text style={styles.header}>Join with code</Text>
@@ -75,7 +86,7 @@ function JoinScreen({ navigation }: JoinScreenProps) {
                 <View style={{flexDirection: 'row', justifyContent: 'center'}}>
                 {letterElements}
                 </View>
-                <Pressable style={styles.touchable}><Text style={styles.touchableText}>Join</Text></Pressable>
+                <Pressable style={codeJoinDisabled ? styles.disabledTouchable : styles.primaryTouchable}><Text style={codeJoinDisabled ? styles.disabledTouchableText : styles.primaryTouchableText}>Join</Text></Pressable>
             </View>
 
             <View style={styles.hrView}>
@@ -86,8 +97,9 @@ function JoinScreen({ navigation }: JoinScreenProps) {
             <View style={{flex: 1, paddingRight: 10}}>
                 <QRScanner/>
             </View>
-
-            <Pressable style={styles.touchable} onPress={navigation.goBack}><Text style={styles.touchableText}>⬅ Back</Text></Pressable>
+            <View style={{alignItems: 'center'}}>
+                <Pressable style={[styles.secondaryTouchable, {width: '50%'}]} onPress={navigation.goBack}><Text style={styles.secondaryTouchableText}>Back</Text></Pressable>
+            </View>
         </View>
     )
 }

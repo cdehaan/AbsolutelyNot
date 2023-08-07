@@ -21,16 +21,15 @@ function QRScanner() {
     setCameraHeight(event.nativeEvent.layout.height)
   }
 
-
   const startCameraElement =
-    <Pressable style={{flex: 1, paddingLeft:10, alignItems: 'center'}} onPress={ToggleCamera}>
+    <View style={{flex: 1, paddingLeft:10, alignItems: 'center'}}>
+      <Pressable style={styles.primaryTouchable} onPress={ToggleCamera}><Text style={styles.primaryTouchableText}>Open Camera</Text></Pressable>
       <Image source={require('./resources/images/QRonPhone.png')} style={{margin: 10, height: 60, resizeMode: 'contain'}} />
-      <Text>Join by QR code</Text>
-    </Pressable>
+    </View>
 
   const QRScanner =
-  <>
-      <Pressable onPress={ToggleCamera} style={{backgroundColor:'#8f8'}}><Text>Close{QRData}</Text></Pressable>
+    <View style={{flex: 1, paddingLeft:10, alignItems: 'center'}}>
+      <Pressable style={styles.primaryTouchable} onPress={ToggleCamera}><Text style={styles.primaryTouchableText}>Close Camera</Text></Pressable>
       <View onLayout={CameraViewLayout} style={{flex:1}}>
         <QRCodeScanner
           ref={cameraParent}
@@ -39,7 +38,7 @@ function QRScanner() {
           cameraStyle={{height: (cameraHeight/1.5), width:(cameraHeight/1.5)}}
         />
       </View>
-  </>
+    </View>
 
   const rootElement = cameraActive ? QRScanner : startCameraElement
 
