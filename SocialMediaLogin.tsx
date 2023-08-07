@@ -31,6 +31,8 @@ function SocialMediaLogin() {
     //const { isSignedIn, name, email, profilePictureURL, internalID } = useSelector((state: RootState) => state.user)
 
     useEffect(() => {
+        console.log('Easy')
+        console.log(Config.GoogleSignin_webClientId)
         GoogleSignin.configure({
             webClientId: Config.GoogleSignin_webClientId,
             offlineAccess: true,
@@ -81,22 +83,23 @@ function SocialMediaLogin() {
             dispatch(setSignedIn(SigninStatus.ERROR))
             ToastAndroid.show(`Signin error: ${error}`, ToastAndroid.LONG)
         } else if (typeof error === 'object' && error !== null && 'code' in error) {
-            if (error.code === statusCodes.SIGN_IN_REQUIRED) {
+            const errorCode = (error as {code?:any}).code
+            if (errorCode === statusCodes.SIGN_IN_REQUIRED) {
                 // This is fine, just means user has not signed in yet, so we can't do it silently
                 dispatch(setSignedIn(SigninStatus.NOT_SIGNED_IN))
             }
-            else if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+            else if (errorCode === statusCodes.SIGN_IN_CANCELLED) {
                 dispatch(setSignedIn(SigninStatus.NOT_SIGNED_IN))
             }
-            else if (error.code === statusCodes.IN_PROGRESS) {
+            else if (errorCode === statusCodes.IN_PROGRESS) {
                 dispatch(setSignedIn(SigninStatus.SIGNING_IN))
             }
-            else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+            else if (errorCode === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
                 dispatch(setSignedIn(SigninStatus.ERROR))
                 ToastAndroid.show('Google Play Service is not available or outdated, you cannot sign in with your Google Account in this app. Sorry.', ToastAndroid.LONG)
             } else {
                 dispatch(setSignedIn(SigninStatus.ERROR))
-                ToastAndroid.show(`Unknown Google Account sign in error. Google said: ${error.code}. Sorry.`, ToastAndroid.LONG)
+                ToastAndroid.show(`Unknown Google Account sign in error. Google said: ${errorCode}. Sorry.`, ToastAndroid.LONG)
             }
         } else {
             dispatch(setSignedIn(SigninStatus.ERROR))
