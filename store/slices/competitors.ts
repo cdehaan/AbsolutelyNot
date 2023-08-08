@@ -25,6 +25,14 @@ const initialState: Array<Player> = [
     lastAction: null,
     active: false  
   },
+  {
+    playerKey: 14,
+    name: 'Tom',
+    picture: null,
+    gameKey: null,
+    lastAction: null,
+    active: false  
+  },
 ]
 
 export const competitorsSlice = createSlice({

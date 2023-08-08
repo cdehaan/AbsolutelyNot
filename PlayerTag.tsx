@@ -11,16 +11,17 @@ type PlayerTagProps = {
 function PlayerTag({ PlayerKey }: PlayerTagProps) {
     const player = useSelector((state: RootState) => state.player)
     const competitors = useSelector((state: RootState) => state.competitors)
+    const myTag = player.playerKey === PlayerKey
 
-    const tagPlayer = player.playerKey === PlayerKey ? player : competitors.find(competitor => competitor.playerKey === PlayerKey)
+    const tagPlayer = myTag ? player : competitors.find(competitor => competitor.playerKey === PlayerKey)
 
-    const playerImage = tagPlayer?.picture ? <Image style={styles.tagImage} source={{uri: tagPlayer.picture}} /> : <Text>No Image</Text>
+    const playerImage = tagPlayer?.picture ? <Image style={styles.tagImage} source={{uri: tagPlayer.picture}} /> : <View style={styles.tagUnknownImage}><Text style={styles.tagUnknownImageText}>?</Text></View>
 
     return(
         <View style={styles.tagView}>
             {playerImage}
             <Text style={styles.tagText}>{tagPlayer?.name}</Text>
-            <Image style={styles.tagPencil} source={require('./resources/images/pencilBlack.png')} />
+            {myTag && <Image style={styles.tagPencil} source={require('./resources/images/pencilBlack.png')} />}
         </View>
     )
 }

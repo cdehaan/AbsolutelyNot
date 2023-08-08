@@ -230,12 +230,25 @@ const styles = StyleSheet.create({
     tagText: {
         color: '#444',
         paddingLeft: 10,
-        paddingRight: 10,
+        paddingRight: 5,
     },
     tagImage: {
         borderRadius: 25,
         width: 25,
         height: 25,
+    },
+    tagUnknownImage: {
+        borderRadius: 25,
+        width: 25,
+        height: 25,
+        backgroundColor: '#888',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    tagUnknownImageText: {
+        fontSize: 15,
+        color: '#eee',
+        fontWeight: 'bold',
     },
     tagPencil: {
         width: 15,
