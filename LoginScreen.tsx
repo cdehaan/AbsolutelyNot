@@ -1,23 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+
+import { Pressable, Text, View, useWindowDimensions, } from 'react-native';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import {
-    Pressable,
-    Text,
-    View,
-    useWindowDimensions,
-} from 'react-native';
+import { RootState } from './store/store';
+import { useSelector } from 'react-redux';
+import { SigninStatus } from "./store/slices/googleAccount";
+import { RootStackParamList } from './types';
+
+import { io } from 'socket.io-client';
 
 import { styles } from './styles';
 import JoinScreen from './JoinScreen';
 import SocialMediaLogin from './SocialMediaLogin';
 import Lobby from './Lobby';
-import { RootState } from './store/store';
-import { useSelector } from 'react-redux';
-import { SigninStatus } from "./store/slices/googleAccount";
-import { RootStackParamList } from './types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'FirstScreen'>;
 
@@ -59,6 +57,30 @@ function FirstScreen({ route, navigation }: Props) {
 }
 
 function LoginScreen() {
+    useEffect(() => {
+        const socket = io('http://34.84.41.250:2525');
+
+        socket.on('connect', () => {
+          console.log('connected to server');
+    
+          // Now you can start listening for other events or emit events
+          socket.on('message', (msg) => {
+            console.log(msg);
+          });
+
+          socket.on('game created', (msg) => {
+            console.log(msg);
+          });
+
+          socket.emit('create game', { playerName: 'Player1' });
+          //socket.emit('message', "React hi");
+          //socket.emit('join game', { gameCode: 'ABCDEF' });
+        });
+    
+        // Disconnect when the component unmounts
+        return () => { socket.disconnect(); };
+    }, []);
+
     const Stack = createNativeStackNavigator<RootStackParamList>()
 
     return(

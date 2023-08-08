@@ -3,9 +3,10 @@ import React from "react";
 import { Pressable, Text, View } from "react-native";
 import { RootStackParamList } from "./types";
 import { styles } from "./styles";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./store/store";
 import PlayerTag from "./PlayerTag";
+import Toggle from "./Toggle";
 
 type LobbyScreenProps = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'JoinScreen'>;
@@ -13,6 +14,8 @@ type LobbyScreenProps = {
 
 function Lobby({ navigation }: LobbyScreenProps) {
     const player = useSelector((state: RootState) => state.player)
+    const game = useSelector((state: RootState) => state.game)
+    const dispatch = useDispatch()
 
     const competitors = useSelector((state: RootState) => state.competitors)
     const competitorTags: JSX.Element[] = []
@@ -22,6 +25,7 @@ function Lobby({ navigation }: LobbyScreenProps) {
 
     return(
         <View style={styles.coreView}>
+            <Text style={styles.header}>Options</Text>
             <Text style={styles.header}>You</Text>
             <PlayerTag PlayerKey={player.playerKey}/>
             <View style={{flex: 1}}>
