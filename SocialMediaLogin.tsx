@@ -1,3 +1,7 @@
+import RNFetchBlob from "rn-fetch-blob";
+import ImageResizer from '@bam.tech/react-native-image-resizer';
+import RNFS from 'react-native-fs';
+
 import { useEffect, useRef } from "react";
 import { Animated, Easing, Image, Pressable, Text, ToastAndroid, View } from "react-native";
 
@@ -8,6 +12,7 @@ import Config from 'react-native-config';
 import { styles } from "./styles";
 import { useDispatch, useSelector } from "react-redux";
 import { SigninStatus, setGoogleUser, setSignedIn } from "./store/slices/googleAccount";
+import { setLastAction, setName, setPicture } from "./store/slices/player";
 import { RootState } from "./store/store";
 
 // https://github.com/react-native-google-signin/google-signin#3-userinfo
@@ -25,6 +30,29 @@ type GoogleUserData = {
     }
 }
 
+async function UrlToBase64(url: string): Promise<string> {
+    // Make the request to download the image.
+    let response = await RNFetchBlob.config({
+      fileCache: true,
+    }).fetch('GET', url);
+    
+    // Get the local file path to the image
+    let path = response.path();
+    
+    // Resize the image
+    let resizedImage = await ImageResizer.createResizedImage(path, 50, 50, 'PNG', 100);
+    
+    // Read the file and convert it to base64.
+    let base64 = await RNFS.readFile(resizedImage.path, 'base64');
+    
+    // Delete the temporary files
+    await RNFS.unlink(path);
+    await RNFS.unlink(resizedImage.path);
+    
+    // Return the base64 string.
+    return `data:image/png;base64,${base64}`;
+}
+  
 function SocialMediaLogin() {
     const dispatch = useDispatch()
     const googleUser = useSelector((state: RootState) => state.googleUser)
@@ -66,15 +94,19 @@ function SocialMediaLogin() {
         }
     }
 
-    function HandleGoogleSignin(userInfo: GoogleUserData) {
-        const userData = {
+    async function HandleGoogleSignin(userInfo: GoogleUserData) {
+        const googleUserData = {
             isSignedIn: SigninStatus.SIGNED_IN,
             name: userInfo.user.name,
             email: userInfo.user.email,
             profilePictureURL: userInfo.user.photo,
             internalID: null,
         }
-        dispatch(setGoogleUser(userData))
+        dispatch(setGoogleUser(googleUserData))
+
+        if(userInfo.user.name) { dispatch(setName(userInfo.user.name)) }
+        dispatch(setLastAction(Date.now()))
+        if(userInfo.user.photo) { dispatch(setPicture(await UrlToBase64(userInfo.user.photo))) }
     }
 
     function HandleGoogleSigninError(error: unknown) {

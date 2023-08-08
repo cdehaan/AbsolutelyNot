@@ -216,6 +216,32 @@ const styles = StyleSheet.create({
         borderRadius: 5,
     },
 
+    /* Player Tag */
+    tagView: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#eee',
+        borderRadius: 1000,
+        alignSelf: 'flex-start',
+        padding: 5,
+    },
+    tagText: {
+        color: '#444',
+        paddingLeft: 10,
+        paddingRight: 10,
+    },
+    tagImage: {
+        borderRadius: 25,
+        width: 25,
+        height: 25,
+    },
+    tagPencil: {
+        width: 15,
+        height: 15,
+        marginRight: 10,
+    }
+
 })
 
 export { styles }

@@ -7,6 +7,7 @@ export type RootStackParamList = {
 export type Player = {
     playerKey:   number | null;
     name:        string | null;
+    picture:     string | null;
     secret?:     string | null; // yes, both undefined and null have meaning
     gameKey:     number | null;
     lastAction:  number | null;
