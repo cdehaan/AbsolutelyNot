@@ -12,7 +12,7 @@ import Config from 'react-native-config';
 import { styles } from "./styles";
 import { useDispatch, useSelector } from "react-redux";
 import { SigninStatus, setGoogleUser, setSignedIn } from "./store/slices/googleAccount";
-import { setLastAction, setName, setPicture } from "./store/slices/player";
+import { removePlayer, setLastAction, setName, setPicture } from "./store/slices/player";
 import { RootState } from "./store/store";
 
 // https://github.com/react-native-google-signin/google-signin#3-userinfo
@@ -89,6 +89,7 @@ function SocialMediaLogin() {
         try {
             await GoogleSignin.signOut()
             dispatch(setSignedIn(SigninStatus.NOT_SIGNED_IN))
+            dispatch(removePlayer())
         } catch (error) {
             HandleGoogleSigninError(error)
         }
@@ -110,6 +111,7 @@ function SocialMediaLogin() {
     }
 
     function HandleGoogleSigninError(error: unknown) {
+        dispatch(removePlayer())
         if (typeof error === "string") {
             dispatch(setSignedIn(SigninStatus.ERROR))
             ToastAndroid.show(`Signin error: ${error}`, ToastAndroid.LONG)

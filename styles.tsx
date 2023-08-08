@@ -225,6 +225,7 @@ const styles = StyleSheet.create({
         borderRadius: 1000,
         alignSelf: 'flex-start',
         padding: 5,
+        marginBottom: 10,
     },
     tagText: {
         color: '#444',

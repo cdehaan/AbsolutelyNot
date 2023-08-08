@@ -24,8 +24,10 @@ function Lobby({ navigation }: LobbyScreenProps) {
         <View style={styles.coreView}>
             <Text style={styles.header}>You</Text>
             <PlayerTag PlayerKey={player.playerKey}/>
-            <Text style={styles.header}>Other players</Text>
-            {competitorTags}
+            <View style={{flex: 1}}>
+                <Text style={styles.header}>Other players</Text>
+                {competitorTags}
+            </View>
             <Pressable style={[styles.secondaryTouchable, {width: '50%'}]} onPress={navigation.goBack}><Text style={styles.secondaryTouchableText}>Back</Text></Pressable>
         </View>
     )

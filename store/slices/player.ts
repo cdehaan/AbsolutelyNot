@@ -3,7 +3,7 @@ import { Player } from '../../types'
 
 const initialState: Player = {
   playerKey: null,
-  name: 'Chris',
+  name: 'Guest',
   picture: null,
   gameKey: null,
   lastAction: null,
@@ -21,6 +21,14 @@ export const playerSlice = createSlice({
       state.lastAction = action.payload.lastAction
       state.active = action.payload.active
     },
+    removePlayer: (state) => {
+        state.playerKey = null
+        state.name = 'Guest'
+        state.picture = null
+        state.gameKey = null
+        state.lastAction = null
+        state.active = null
+    },
     setPlayerKey:  (state, action: PayloadAction<number>)  => { state.playerKey  = action.payload },
     setName:       (state, action: PayloadAction<string>)  => { state.name       = action.payload },
     setPicture:    (state, action: PayloadAction<string>)  => { state.picture    = action.payload },
@@ -31,6 +39,6 @@ export const playerSlice = createSlice({
   },
 })
 
-export const { setPlayer, setPlayerKey, setName, setPicture, setSecret, setLastAction, setActive } = playerSlice.actions
+export const { setPlayer, removePlayer, setPlayerKey, setName, setPicture, setSecret, setLastAction, setActive } = playerSlice.actions
 
 export default playerSlice.reducer
