@@ -5,6 +5,9 @@ import { RootStackParamList } from './types';
 
 import QRScanner from "./QRScanner";
 import { styles } from "./styles";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "./store/store";
+import { setGameKey } from "./store/slices/player";
 
 type JoinScreenProps = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'JoinScreen'>;
@@ -17,17 +20,11 @@ function JoinScreen({ navigation }: JoinScreenProps) {
 
     useEffect(() => {
         const keyboardDidShowListener = Keyboard.addListener(
-          'keyboardDidShow',
-          () => {
-            setKeyboardVisible(true);
-          },
+          'keyboardDidShow', () => { setKeyboardVisible(true); },
         );
     
         const keyboardDidHideListener = Keyboard.addListener(
-          'keyboardDidHide',
-          () => {
-            setKeyboardVisible(false);
-          },
+          'keyboardDidHide', () => { setKeyboardVisible(false); },
         );
     
         return () => {
@@ -40,6 +37,11 @@ function JoinScreen({ navigation }: JoinScreenProps) {
         let newGameCode = [...gameCode]
         newGameCode[i] = e.nativeEvent.text.slice(-1).toUpperCase();
         setGameCode(newGameCode);
+    }
+
+    function JoinWithCode() {
+        const codeComplete = gameCode.reduce((accumulator, currentValue) => {return (currentValue !== "" && accumulator)}, true)
+        if(!codeComplete) return
     }
 
     const letterRefs: React.MutableRefObject<TextInput | null>[] = []
@@ -106,7 +108,7 @@ function JoinScreen({ navigation }: JoinScreenProps) {
             <View style={{flexDirection: 'row', justifyContent: 'center'}}>
             {letterElements}
             </View>
-            <Pressable style={codeJoinDisabled ? styles.disabledTouchable : styles.primaryTouchable}><Text style={codeJoinDisabled ? styles.disabledTouchableText : styles.primaryTouchableText}>Join</Text></Pressable>
+            <Pressable onPress={JoinWithCode} style={codeJoinDisabled ? styles.disabledTouchable : styles.primaryTouchable}><Text style={codeJoinDisabled ? styles.disabledTouchableText : styles.primaryTouchableText}>Join</Text></Pressable>
         </View></>
 
         const qrScannerComponent = <>

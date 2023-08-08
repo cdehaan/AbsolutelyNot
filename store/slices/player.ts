@@ -39,6 +39,6 @@ export const playerSlice = createSlice({
   },
 })
 
-export const { setPlayer, removePlayer, setPlayerKey, setName, setPicture, setSecret, setLastAction, setActive } = playerSlice.actions
+export const { setPlayer, removePlayer, setPlayerKey, setName, setPicture, setSecret, setGameKey, setLastAction, setActive } = playerSlice.actions
 
 export default playerSlice.reducer

@@ -15,6 +15,8 @@ import { SigninStatus, setGoogleUser, setSignedIn } from "./store/slices/googleA
 import { removePlayer, setLastAction, setName, setPicture } from "./store/slices/player";
 import { RootState } from "./store/store";
 
+const dispatch = useDispatch()
+
 // https://github.com/react-native-google-signin/google-signin#3-userinfo
 type GoogleUserData = {
     idToken: string | null,
@@ -54,7 +56,6 @@ async function UrlToBase64(url: string): Promise<string> {
 }
   
 function SocialMediaLogin() {
-    const dispatch = useDispatch()
     const googleUser = useSelector((state: RootState) => state.googleUser)
     //const { isSignedIn, name, email, profilePictureURL, internalID } = useSelector((state: RootState) => state.user)
 
