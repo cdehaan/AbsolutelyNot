@@ -1,7 +1,7 @@
 import React, {useRef, useState } from "react";
 import { Image, LayoutChangeEvent, Pressable, Text, View } from "react-native";
 import QRCodeScanner from "react-native-qrcode-scanner";
-import { styles } from "./styles";
+import styles from "./styles";
   
 function QRScanner() {
   const [QRData, setQRData] = useState('')

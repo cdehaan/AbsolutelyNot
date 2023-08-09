@@ -1,7 +1,7 @@
 import { Image, Text, View } from "react-native"
 import { useSelector } from "react-redux"
 import { RootState } from "./store/store"
-import { styles } from "./styles"
+import styles from "./styles"
 
 // Define a type for your props
 type PlayerTagProps = {

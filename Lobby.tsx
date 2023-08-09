@@ -2,11 +2,10 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React from "react";
 import { Pressable, Text, View } from "react-native";
 import { RootStackParamList } from "./types";
-import { styles } from "./styles";
+import styles from "./styles";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./store/store";
 import PlayerTag from "./PlayerTag";
-import Toggle from "./Toggle";
 
 type LobbyScreenProps = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'JoinScreen'>;

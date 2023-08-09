@@ -9,7 +9,7 @@ import { GoogleSignin, statusCodes, } from '@react-native-google-signin/google-s
 
 import Config from 'react-native-config';
 
-import { styles } from "./styles";
+import styles from "./styles";
 import { useDispatch, useSelector } from "react-redux";
 import { SigninStatus, setGoogleUser, setSignedIn } from "./store/slices/googleAccount";
 import { removePlayer, setLastAction, setName, setPicture } from "./store/slices/player";
