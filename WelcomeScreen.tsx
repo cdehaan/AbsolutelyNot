@@ -4,6 +4,9 @@ import { useSelector } from "react-redux";
 import { RootState } from "./store/store";
 import { SigninStatus } from "./store/slices/googleAccount";
 import { Pressable, Text, View } from "react-native";
+
+import Config from 'react-native-config';
+
 import styles from "./styles";
 import SocialMediaLogin from "./SocialMediaLogin";
 import useSocket from "./useSocket";
@@ -16,7 +19,8 @@ function WelcomeScreen({ route, navigation }: Props) {
 
     const isGuest = googleUser.isSignedIn !== SigninStatus.SIGNED_IN
 
-    const {socket, createGame} = useSocket('http://34.84.41.250:2525');
+    if(Config.ServerIpAddress === undefined) { return }
+    const {socket, createGame} = useSocket(Config.ServerIpAddress);
 
     return(
         <View style={styles.coreView}>
