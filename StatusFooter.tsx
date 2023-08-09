@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from 'react';
 import { Image, Text, View, } from 'react-native';
 
-import { styles } from './styles';
+import styles from './styles';
 
 type StatusFooterProps = PropsWithChildren <{ score: number; }>;
 

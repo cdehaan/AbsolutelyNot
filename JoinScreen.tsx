@@ -4,10 +4,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from './types';
 
 import QRScanner from "./QRScanner";
-import { styles } from "./styles";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "./store/store";
-import { setGameKey } from "./store/slices/player";
+import styles from "./styles";
 
 type JoinScreenProps = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'JoinScreen'>;
