@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import { Pressable, Text, View, useWindowDimensions, } from 'react-native';
 
@@ -10,12 +10,11 @@ import { useSelector } from 'react-redux';
 import { SigninStatus } from "./store/slices/googleAccount";
 import { RootStackParamList } from './types';
 
-import { io } from 'socket.io-client';
-
 import { styles } from './styles';
 import JoinScreen from './JoinScreen';
 import SocialMediaLogin from './SocialMediaLogin';
 import Lobby from './Lobby';
+import useSocket from './useSocket';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'FirstScreen'>;
 
@@ -56,30 +55,8 @@ function FirstScreen({ route, navigation }: Props) {
     )
 }
 
-function LoginScreen() {
-    useEffect(() => {
-        const socket = io('http://34.84.41.250:2525');
-
-        socket.on('connect', () => {
-          console.log('connected to server');
-    
-          // Now you can start listening for other events or emit events
-          socket.on('message', (msg) => {
-            console.log(msg);
-          });
-
-          socket.on('game created', (msg) => {
-            console.log(msg);
-          });
-
-          socket.emit('create game', { playerName: 'Player1' });
-          //socket.emit('message', "React hi");
-          //socket.emit('join game', { gameCode: 'ABCDEF' });
-        });
-    
-        // Disconnect when the component unmounts
-        return () => { socket.disconnect(); };
-    }, []);
+function NavigationStack() {
+    const {socket, createGame} = useSocket('http://34.84.41.250:2525');
 
     const Stack = createNativeStackNavigator<RootStackParamList>()
 
@@ -95,4 +72,4 @@ function LoginScreen() {
     )
 }
 
-export default LoginScreen
+export default NavigationStack

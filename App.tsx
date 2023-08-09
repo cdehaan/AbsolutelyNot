@@ -9,7 +9,7 @@ import React, {useState} from 'react';
 import { Provider } from 'react-redux'
 import { store } from './store/store'
 
-import LoginScreen from './LoginScreen';
+import NavigationStack from './NavigationStack';
 import GameScreen from './GameScreen';
 import StatusFooter from './StatusFooter';
 
@@ -52,7 +52,7 @@ function App(): JSX.Element {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      {!LoggedIn() ? <LoginScreen /> : <GameScreen />}
+      {!LoggedIn() ? <NavigationStack /> : <GameScreen />}
 
       {LoggedIn() && <StatusFooter score={5} />}
     </SafeAreaView>
