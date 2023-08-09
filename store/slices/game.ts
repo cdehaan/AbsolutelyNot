@@ -11,6 +11,7 @@ const initialState: Game = {
     active:       null,
     created:      null,
     started:      Date.now(),
+    options:      [],
 }
 
 export const gameSlice = createSlice({

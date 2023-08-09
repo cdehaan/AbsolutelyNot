@@ -8,9 +8,7 @@ type ToggleProps = {
 }
 
 function Toggle(Props: ToggleProps): JSX.Element {
-  const game = useSelector((state: RootState) => state.)
-
-  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+  const game = useSelector((state: RootState) => state.game)
 
   return (
     <View style={styles.container}>

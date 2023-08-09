@@ -14,6 +14,12 @@ export type Player = {
     active:      boolean | null;
 }
 
+export type GameOption = {
+    name:        string;
+    description: string;
+    type:        'bool' | 'int' | 'string';
+}
+
 export type Game = {
     game_key:     number  | null;
     code:         string  | null;
@@ -24,4 +30,5 @@ export type Game = {
     active:       boolean | null;
     created:      number  | null;
     started:      number  | null;
+    options:      Array<GameOption>;
 }
