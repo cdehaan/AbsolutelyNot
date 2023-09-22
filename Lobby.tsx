@@ -1,6 +1,7 @@
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React from "react";
 import { Pressable, Text, View } from "react-native";
+
 import { RootStackParamList } from "./types";
 import styles from "./styles";
 import { useDispatch, useSelector } from "react-redux";

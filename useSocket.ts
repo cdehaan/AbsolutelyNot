@@ -1,71 +1,101 @@
 import { useEffect, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
 
-const useSocket = (serverUrl: string) => {
+//const useSocket = (serverUrl: string) => {
+const useSocket = () => {
     const socketRef = useRef<Socket | null>(null);
+    const serverUrl = 'http://absolutelynot.app:2525/'
 
     useEffect(() => {
-        socketRef.current = io(serverUrl);
 
-        socketRef.current.on('connect', () => {
+        // Create a socket if it doesn't exist
+        if (!socketRef.current) { socketRef.current = io(serverUrl); }
+
+        function OnConnect() {
             if(socketRef.current === null) {
                 console.log('Connected to server, but socketRef.current is null');
                 return
             }
-
             console.log('Connected to server');
+        }
 
-            socketRef.current.on('message', (msg) => {
-                console.log(msg);
-            });
+        function OnMessage(msg: any) {
+            console.log('Message: ', msg);
+        }
 
-            socketRef.current.on('game created', (msg) => {
-                console.log(msg);
-            });
+        function OnGameCreated(msg: any) {
+            console.log('Game created: ', msg);
+        }
 
-            socketRef.current.emit('create game', { playerName: 'Player1' });
-            //socketRef.current.emit('message', "React hi");
-            //socketRef.current.emit('join game', { gameCode: 'ABCDEF' });
-        });
+        function OnGameJoined(msg: any) {
+            console.log('Game joined:', msg);
+        }
 
-        // Disconnect when the component unmounts
-        return () => { socketRef.current && socketRef.current.disconnect(); };
+        function OnGameRejoined(msg: any) {
+            console.log('Game rejoined:', msg);
+        }
+
+        function onConnectError(error: any) {
+            console.log('Connection Error: ', error);
+        }
+
+        function onError(error: any) {
+            console.log('Socket.IO Error: ', error);
+        }
+
+        function onDisconnect(reason: any) {
+            console.log("Disconnected from server due to: ", reason);
+        }
+
+        socketRef.current.on('connect',       OnConnect);
+        socketRef.current.on('message',       OnMessage);
+        socketRef.current.on('game created',  OnGameCreated);
+        socketRef.current.on('game joined',   OnGameJoined);
+        socketRef.current.on('game rejoined', OnGameRejoined);
+
+        socketRef.current.on('connect_error', onConnectError);
+        socketRef.current.on('error',         onError);
+        socketRef.current.on('disconnect',    onDisconnect);
+
+    
+
+        // Remove Event listeners and disconnect when closed
+        return () => {
+            if(socketRef.current) {
+                socketRef.current.off('connect',       OnConnect);
+                socketRef.current.off('message',       OnMessage);
+                socketRef.current.off('game created',  OnGameCreated);
+                socketRef.current.off('game joined',   OnGameJoined);
+                socketRef.current.off('game rejoined', OnGameRejoined);
+
+                socketRef.current.off('connect_error', onConnectError);
+                socketRef.current.off('error',         onError);
+                socketRef.current.off('disconnect',    onDisconnect);
+
+                socketRef.current.disconnect();
+            }            
+        };
     }, []);
 
 
 
-    const createGame = (playerName: string) => {
-        socketRef.current?.emit('create game', { playerName });
+    const sendMessage = (message: string) => {
+        socketRef.current?.emit('message', message);
     };
 
-    socketRef.current?.on('game created', (data) => {
-        console.log('Game created:', data);
-        // handle any other logic or state updates here
-    });
-
-
+    const createGame = (playerName: string) => {
+        socketRef.current?.emit('create game', { playerName: playerName });
+    };
 
     const joinGame = (gameCode: string, playerName: string) => {
-        socketRef.current?.emit('join game', { gameCode, playerName });
+        socketRef.current?.emit('join game', { gameCode: gameCode, playerName: playerName });
     };
-
-    socketRef.current?.on('game joined', (data) => {
-        console.log('Game joined:', data);
-        // handle any other logic or state updates here
-    });
-
-
 
     const rejoinGame = (playerId: string, gameCode: string) => {
-        socketRef.current?.emit('rejoin game', { playerId, gameCode });
+        socketRef.current?.emit('rejoin game', { playerId: playerId, gameCode: gameCode });
     };
 
-    socketRef.current?.on('game rejoined', (data) => {
-        console.log('Game rejoined:', data);
-        // handle any other logic or state updates here
-    });
-
-    return {socket: socketRef.current, createGame, joinGame, rejoinGame}
+    return {socket: socketRef.current, sendMessage, createGame, joinGame, rejoinGame}
 };
 
 export default useSocket;

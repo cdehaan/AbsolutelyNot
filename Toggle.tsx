@@ -10,6 +10,10 @@ type ToggleProps = {
 function Toggle(Props: ToggleProps): JSX.Element {
   const game = useSelector((state: RootState) => state.game)
 
+  // Placeholder values
+  const isEnabled = true
+  function toggleSwitch() {}
+
   return (
     <View style={styles.container}>
       <Switch

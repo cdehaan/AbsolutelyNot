@@ -20,7 +20,7 @@ function WelcomeScreen({ route, navigation }: Props) {
     const isGuest = googleUser.isSignedIn !== SigninStatus.SIGNED_IN
 
     if(Config.ServerIpAddress === undefined) { return }
-    const {socket, createGame} = useSocket(Config.ServerIpAddress);
+    //const {socket, createGame} = useSocket(Config.ServerIpAddress);
 
     return(
         <View style={styles.coreView}>
